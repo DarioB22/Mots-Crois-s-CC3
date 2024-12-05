@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Générateur de Mots Mêlés</title>
+<style>
+  body { font-family: Arial, sans-serif; text-align: center; }
+  table { margin: auto; border-collapse: collapse; }
+  td {
+    width: 30px; height: 30px; border: 1px solid #000;
+    text-align: center; font-size: 20px; cursor: pointer;
+    background-color: white;
+  }
+  .highlighted { background-color: yellow; }
+  .found { text-decoration: line-through; color: gray; }
+  .word-highlighted { background-color: lightgreen !important; } /* Nouveau style */
+  #wordList { margin-top: 20px; }
+</style>
+</head>
+<body>
+<h1>Mots Mêlés</h1>
+<table id="grid"></table>
+<div id="wordList"></div>
+<div id="espace"></br></br></br></br></br></div> <!-- Changez le texte si nécessaire -->
+<div id="footer">Créé par Brunetti Dario, Orro Tomas et Guignard Amaury,</div> <!-- Changez le texte si nécessaire -->
+
+<script>
+// Exemple de grille et de mots
+const gridData = [
+  ['F', 'A', 'I', 'R', 'P', 'L', 'A','Y','P','S'],
+  ['A', 'M', 'U', 'S', 'E', 'M', 'E','N','T','O'],
+  ['E', 'R', 'E', 'S', 'P', 'E', 'C','T','E','U'],
+  ['C', 'D', 'D', 'U', 'E', 'L', 'M','D','T','T'],
+  ['Z', 'O', 'N', 'E', 'O', 'E', 'J','E','I','I'],
+  ['A', 'T', 'T', 'A', 'Q', 'U', 'E','F','R','E'],
+  ['D', 'E', 'M', 'A', 'R', 'Q', 'U','E','R','N'],
+  ['V', 'A', 'L', 'E', 'U', 'R', 'Y','N','B','K'],
+  ['V', 'Z', 'P', 'A', 'S', 'S', 'E','S','P','I'],
+  ['P', 'U', 'S', 'R', 'V', 'R', 'Z','E','C','V'],
+];
+
+const words = ['PASSE', 'TIR', 'DUEL', 'RESPECT', 'VALEUR', 'FAIRPLAY', 'AMUSEMENT', 'ATTAQUE', 'DEFENSE', 'ZONE', 'SOUTIEN', 'DEMARQUER'];
+
+// Création de la grille
+const grid = document.getElementById('grid');
+const cells = []; // Pour garder une référence à chaque cellule
+
+gridData.forEach((row, rowIndex) => {
+  const tr = document.createElement('tr');
+  const rowCells = [];
+  row.forEach((cell, colIndex) => {
+    const td = document.createElement('td');
+    td.textContent = cell;
+    td.dataset.row = rowIndex;
+    td.dataset.col = colIndex;
+    
+    // Ajout d'un événement de clic pour surligner les lettres
+    td.addEventListener('click', () => {
+      td.classList.toggle('highlighted');
+      checkWord();
+    });
+
+    rowCells.push(td);
+    tr.appendChild(td);
+  });
+  cells.push(rowCells);
+  grid.appendChild(tr);
+});
+
+// Affichage de la liste des mots
+const wordListDiv = document.getElementById('wordList');
+words.forEach(word => {
+  const div = document.createElement('div');
+  div.textContent = word;
+  div.id = `word-${word}`;
+  wordListDiv.appendChild(div);
+});
+
+// Fonction pour vérifier si un mot a été trouvé
+function checkWord() {
+  const highlightedCells = document.querySelectorAll('.highlighted');
+  const selectedWord = Array.from(highlightedCells).map(cell => cell.textContent).join('');
+  
+  // Vérifie si le mot sélectionné est dans la liste des mots
+  words.forEach(word => {
+    if (selectedWord === word) {
+      document.getElementById(`word-${word}`).classList.add('found');  // Barre le mot trouvé
+      
+      // Surligne les cellules du mot trouvé en vert
+      highlightedCells.forEach(cell => {
+        cell.classList.add('word-highlighted');
+        cell.classList.remove('highlighted');
+      });
+    }
+  });
+}
+</script>
+</body>
+</html>
